@@ -125,6 +125,14 @@ const TrackOrder: React.FC = () => {
               <span className="text-gray-500 dark:text-gray-400">Total Paid</span>
               <span className="text-xl font-bold text-orange-500">{formatPrice(order.totalAmount)}</span>
             </div>
+            {statusIndex === statuses.length - 1 && (
+              <button 
+                onClick={() => navigate(`/vendor/${order.items[0].vendorId}?tab=reviews`)}
+                className="w-full bg-orange-500 text-white py-4 rounded-2xl font-black shadow-lg shadow-orange-500/20 hover:bg-orange-600 transition-all mt-6"
+              >
+                Review Vendor
+              </button>
+            )}
           </div>
 
           {/* Courier Info */}

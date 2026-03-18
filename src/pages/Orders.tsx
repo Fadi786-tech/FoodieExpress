@@ -127,6 +127,14 @@ const Orders: React.FC = () => {
                     >
                       Track Order
                     </button>
+                    {order.status === 'Delivered' && (
+                      <button 
+                        onClick={() => navigate(`/vendor/${order.items[0].vendorId}?tab=reviews`)}
+                        className="bg-orange-500 text-white px-6 py-3 rounded-2xl font-bold text-sm hover:bg-orange-600 transition-all flex items-center"
+                      >
+                        Review Vendor
+                      </button>
+                    )}
                     <Link 
                       to={`/track-order/${order.id}`}
                       className="p-3 border border-gray-200 dark:border-gray-800 rounded-2xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-all"

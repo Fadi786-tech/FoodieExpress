@@ -16,6 +16,10 @@ export const VENDORS: Vendor[] = [
     deliveryFee: 99,
     address: 'Main Boulevard, Gulberg III, Lahore',
     isOpen: true,
+    reviews: [
+      { id: 'r1', userId: 'u1', userName: 'Ali Ahmed', rating: 5, comment: 'Best burgers in town! The Whopper is always fresh.', date: '2024-03-15' },
+      { id: 'r2', userId: 'u2', userName: 'Sara Khan', rating: 4, comment: 'Great taste but delivery was a bit slow today.', date: '2024-03-10' },
+    ],
   },
   {
     id: 'v5',
@@ -31,6 +35,9 @@ export const VENDORS: Vendor[] = [
     deliveryFee: 120,
     address: 'DHA Phase 5, Lahore',
     isOpen: true,
+    reviews: [
+      { id: 'r3', userId: 'u3', userName: 'Zainab Bibi', rating: 5, comment: 'Love the thin crust! Highly recommended.', date: '2024-03-12' },
+    ],
   },
   {
     id: 'v6',

@@ -45,6 +45,7 @@ export interface Vendor {
   deliveryFee: number;
   address: string;
   isOpen: boolean;
+  reviews?: Review[];
 }
 
 export interface Product {
