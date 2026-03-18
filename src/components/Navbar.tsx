@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ShoppingCart, User, Search, Menu, X, LogOut, Heart, Package } from 'lucide-react';
+import { ShoppingCart, User, Search, Menu, X, LogOut, Heart, Package, ChevronDown, Settings } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import { motion, AnimatePresence } from 'motion/react';
@@ -71,31 +71,39 @@ const Navbar: React.FC = () => {
                     )}
                   </div>
                   <span className="text-sm font-black text-gray-900 hidden lg:block tracking-tight">{user?.name}</span>
+                  <ChevronDown className="h-4 w-4 text-gray-400 hidden lg:block" />
                 </button>
 
                 <AnimatePresence>
                   {isProfileOpen && (
                     <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 10 }}
-                      className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-50"
+                      initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                      className="absolute right-0 mt-3 w-56 bg-white rounded-2xl shadow-2xl border border-gray-100 py-2 z-50 overflow-hidden"
                     >
-                      <Link to="/profile" className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
-                        <User className="h-4 w-4 mr-2" /> Profile
+                      <div className="px-4 py-3 border-b border-gray-50 mb-1">
+                        <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Account</p>
+                        <p className="text-sm font-black text-gray-900 truncate">{user?.email}</p>
+                      </div>
+                      <Link to="/profile" className="flex items-center px-4 py-2.5 text-sm font-bold text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                        <User className="h-4 w-4 mr-3" /> Profile
                       </Link>
-                      <Link to="/orders" className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
-                        <Package className="h-4 w-4 mr-2" /> Orders
+                      <Link to="/orders" className="flex items-center px-4 py-2.5 text-sm font-bold text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                        <Package className="h-4 w-4 mr-3" /> My Orders
                       </Link>
-                      <Link to="/wishlist" className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
-                        <Heart className="h-4 w-4 mr-2" /> Wishlist
+                      <Link to="/wishlist" className="flex items-center px-4 py-2.5 text-sm font-bold text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                        <Heart className="h-4 w-4 mr-3" /> Wishlist
                       </Link>
-                      <hr className="my-1 border-gray-100" />
+                      <Link to="/settings" className="flex items-center px-4 py-2.5 text-sm font-bold text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                        <Settings className="h-4 w-4 mr-3" /> Settings
+                      </Link>
+                      <hr className="my-2 border-gray-50" />
                       <button
                         onClick={handleLogout}
-                        className="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+                        className="flex items-center w-full px-4 py-2.5 text-sm font-bold text-red-600 hover:bg-red-50 transition-colors"
                       >
-                        <LogOut className="h-4 w-4 mr-2" /> Logout
+                        <LogOut className="h-4 w-4 mr-3" /> Logout
                       </button>
                     </motion.div>
                   )}
@@ -124,26 +132,97 @@ const Navbar: React.FC = () => {
       {/* Mobile Menu */}
       <AnimatePresence>
         {isMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-white border-t border-gray-100 overflow-hidden"
-          >
-            <div className="px-4 pt-2 pb-6 space-y-1">
-              <div className="py-3">
-                <input
-                  type="text"
-                  className="block w-full px-4 py-2 border border-gray-200 rounded-full bg-gray-50 text-sm"
-                  placeholder="Search..."
-                />
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsMenuOpen(false)}
+              className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 md:hidden"
+            />
+            <motion.div
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="fixed top-0 right-0 bottom-0 w-[80%] max-w-sm bg-white z-50 md:hidden shadow-2xl flex flex-col"
+            >
+              <div className="p-6 flex justify-between items-center border-b border-gray-50">
+                <span className="text-xl font-black text-gray-900 tracking-tighter">
+                  Foodie<span className="text-orange-500">Express</span>
+                </span>
+                <button onClick={() => setIsMenuOpen(false)} className="p-2 text-gray-400 hover:text-gray-900">
+                  <X className="h-6 w-6" />
+                </button>
               </div>
-              <Link to="/category/Food" className="block px-4 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 rounded-lg">Food</Link>
-              <Link to="/category/Grocery" className="block px-4 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 rounded-lg">Grocery</Link>
-              <Link to="/category/Electronics" className="block px-4 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 rounded-lg">Electronics</Link>
-              <Link to="/category/Bakery" className="block px-4 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 rounded-lg">Bakery</Link>
-            </div>
-          </motion.div>
+
+              <div className="flex-grow overflow-y-auto py-6 px-4 space-y-2">
+                <div className="pb-6 mb-6 border-b border-gray-50">
+                  <div className="relative">
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                    <input
+                      type="text"
+                      placeholder="Search anything..."
+                      className="w-full pl-12 pr-4 py-4 bg-gray-50 border-none rounded-2xl text-sm font-bold focus:ring-2 focus:ring-orange-500/20"
+                    />
+                  </div>
+                </div>
+
+                <p className="px-4 text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Categories</p>
+                <Link to="/category/Food" onClick={() => setIsMenuOpen(false)} className="flex items-center px-4 py-4 text-base font-black text-gray-700 hover:bg-orange-50 hover:text-orange-600 rounded-2xl transition-all">
+                  <div className="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center mr-4">
+                    <ShoppingCart className="h-5 w-5 text-orange-600" />
+                  </div>
+                  Food Delivery
+                </Link>
+                <Link to="/category/Grocery" onClick={() => setIsMenuOpen(false)} className="flex items-center px-4 py-4 text-base font-black text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-2xl transition-all">
+                  <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center mr-4">
+                    <Package className="h-5 w-5 text-green-600" />
+                  </div>
+                  Groceries
+                </Link>
+                <Link to="/category/Electronics" onClick={() => setIsMenuOpen(false)} className="flex items-center px-4 py-4 text-base font-black text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-2xl transition-all">
+                  <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center mr-4">
+                    <Search className="h-5 w-5 text-blue-600" />
+                  </div>
+                  Electronics
+                </Link>
+                <Link to="/category/Bakery" onClick={() => setIsMenuOpen(false)} className="flex items-center px-4 py-4 text-base font-black text-gray-700 hover:bg-yellow-50 hover:text-yellow-600 rounded-2xl transition-all">
+                  <div className="w-10 h-10 bg-yellow-100 rounded-xl flex items-center justify-center mr-4">
+                    <ShoppingCart className="h-5 w-5 text-yellow-600" />
+                  </div>
+                  Bakery
+                </Link>
+
+                <div className="pt-6 mt-6 border-t border-gray-50">
+                  <p className="px-4 text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Account</p>
+                  {isAuthenticated ? (
+                    <>
+                      <Link to="/profile" onClick={() => setIsMenuOpen(false)} className="flex items-center px-4 py-4 text-base font-black text-gray-700 hover:bg-gray-50 rounded-2xl transition-all">
+                        <User className="h-5 w-5 mr-4 text-gray-400" /> Profile
+                      </Link>
+                      <Link to="/orders" onClick={() => setIsMenuOpen(false)} className="flex items-center px-4 py-4 text-base font-black text-gray-700 hover:bg-gray-50 rounded-2xl transition-all">
+                        <Package className="h-5 w-5 mr-4 text-gray-400" /> My Orders
+                      </Link>
+                      <button onClick={handleLogout} className="flex items-center w-full px-4 py-4 text-base font-black text-red-600 hover:bg-red-50 rounded-2xl transition-all">
+                        <LogOut className="h-5 w-5 mr-4" /> Logout
+                      </button>
+                    </>
+                  ) : (
+                    <Link to="/login" onClick={() => setIsMenuOpen(false)} className="flex items-center px-4 py-4 text-base font-black text-orange-600 hover:bg-orange-50 rounded-2xl transition-all">
+                      <User className="h-5 w-5 mr-4" /> Login / Register
+                    </Link>
+                  )}
+                </div>
+              </div>
+
+              <div className="p-6 border-t border-gray-50">
+                <button className="w-full bg-orange-500 text-white py-4 rounded-2xl font-black shadow-lg shadow-orange-500/20">
+                  Download App
+                </button>
+              </div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </nav>
